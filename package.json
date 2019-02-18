@@ -19,5 +19,15 @@
     "mongoose": "^5.4.13",
     "supertest": "^3.4.2",
     "swagger-ui-express": "^4.0.2"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
+  },
+  "standard": {
+    "ignore": [
+      "/apidoc/",
+      "/myapp/",
+      "/test/"
+    ]
   }
 }
