@@ -1,71 +1,63 @@
 require('mocha')
 const request = require('supertest')
-const { expect } = require('chai');
+const { expect } = require('chai')
 const server = require('../server')
 const schemas = require('../lib/schemas')
 
-describe('API requests', function() {
+describe('API requests', function () {
   before(async () => {
     await schemas.Assignments.deleteAll()
-  });
+  })
 
-  it('/',() => {
+  it('/', () => {
     request(server)
-    .get('/test')
-    .expect(200)
-    .end(function (err, res) {
-      expect(err).to.eql(null)
-    });
+      .get('/test')
+      .expect(200)
+      .end(function (err, res) {
+        expect(err).to.eql(null)
+      })
   })
 
   describe('/create', () => {
-    
-    it('succsesfully creates new assignment', () => {
+    it('succsesfully creates new assignment', (done) => {
       request(server)
-      .post('/create')
-      .send({
-        description: 'Test assignment description',
-        name: 'Test assignment',
-        duration: 10,
-        type: 'Math assignment'
-      })
-      .set('Accept', 'application/json')
-      .expect('Content-Type', 'application/json; charset=utf-8')
-      .expect(201)
-      .end((err, resp) => {
-        expect(err).to.eql(null)
-        expect(resp.body).to.eql({
-          name: 'Test assignment',
+        .post('/create')
+        .send({
           description: 'Test assignment description',
-          type: 'Math assignment',
-          tags: [],
+          name: 'Test assignment',
           duration: 10,
-          created: resp.body.created,
-          _id: resp.body._id,
-          __v: 0
+          type: 'Math assignment'
         })
-      })
+        .set('Accept', 'application/json')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(201)
+        .end((err, resp) => {
+          expect(err).to.eql(null)
+          expect(resp.body).to.eql({
+            url: resp.body.url
+          })
+          done()
+        })
     })
 
-    it('handles error when required field is missing', () => {
+    it('handles error when required field is missing', (done) => {
       request(server)
-      .post('/create')
-      .send({
-        duration: 10,
-        type: 'Math assignment'
-      })
-      .set('Accept', 'application/json')
-      .expect('Content-Type', 'application/json; charset=utf-8')
-      .expect(400)
-      .end((err, resp) => {
-        expect(err).to.eql(null)
-        expect(resp.body).to.eql({
-          error: 'Bad parameter: Path `name` is required. Path `description` is required.'
+        .post('/create')
+        .send({
+          duration: 10,
+          type: 'Math assignment'
         })
-      })
+        .set('Accept', 'application/json')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(400)
+        .end((err, resp) => {
+          expect(err).to.eql(null)
+          expect(resp.body).to.eql({
+            error: 'Bad parameter: Path `name` is required. Path `description` is required.'
+          })
+        })
+        done()
     })
-
-
   })
 
   describe('/getAssignment', () => {
@@ -82,28 +74,27 @@ describe('API requests', function() {
 
     it('responds with assignment', (done) => {
       request(server)
-      .get(`/getAssignment/${assignment._id}`)
-      .expect(200)
-      .end((err, resp) => {
-        expect(err).to.eql(null)
-        // TODO use moment to switch the format of date, rather than deleting it
-        delete resp.body.created
-        delete assignment.created
-        expect(resp.body).to.eql(assignment)
-        done()
-      })
+        .get(`/getAssignment/${assignment._id}`)
+        .expect(200)
+        .end((err, resp) => {
+          expect(err).to.eql(null)
+          // TODO use moment to switch the format of date, rather than deleting it
+          delete resp.body.created
+          delete assignment.created
+          expect(resp.body).to.eql(assignment)
+          done()
+        })
     })
 
     it('responds with 404 when no document is found', (done) => {
       request(server)
-      .get(`/getAssignment/fakeId`)
-      .expect(404)
-      .end((err, resp) => {
-        expect(err).to.eql(null)
-        done()
-      })
+        .get(`/getAssignment/fakeId`)
+        .expect(404)
+        .end((err, resp) => {
+          expect(err).to.eql(null)
+          done()
+        })
     })
-
   })
 
   describe('/searchTags', () => {
@@ -134,31 +125,25 @@ describe('API requests', function() {
 
     it('responds with assignments of specified tag', (done) => {
       request(server)
-      .get(`/searchTags/geometry`)
-      .expect(200)
-      .end((err, resp) => {
-        expect(err).to.eql(null)
-        expect(resp.body.assignments.length).to.eql(2)
-        expect(resp.body.assignments[0].name).to.eql('Fun Geo Assignment')
-        done()
-      })
+        .get(`/searchTags/geometry`)
+        .expect(200)
+        .end((err, resp) => {
+          expect(err).to.eql(null)
+          expect(resp.body.assignments.length).to.eql(2)
+          expect(resp.body.assignments[0].name).to.eql('Fun Geo Assignment')
+          done()
+        })
     })
 
     it('responds with empty array if nothing matches specified tag', (done) => {
       request(server)
-      .get(`/searchTags/calc`)
-      .expect(200)
-      .end((err, resp) => {
-        expect(err).to.eql(null)
-        expect(resp.body.assignments).to.eql([])
-        done()
-      })
+        .get(`/searchTags/calc`)
+        .expect(200)
+        .end((err, resp) => {
+          expect(err).to.eql(null)
+          expect(resp.body.assignments).to.eql([])
+          done()
+        })
     })
-
   })
-  
-
 })
-
-
-
