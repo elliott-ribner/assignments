@@ -8,6 +8,7 @@ const conf = require('../config')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.text())
+app.use(express.static('public'));
 
 const mongoDB = conf.mongo
 mongoose.connect(mongoDB, { useNewUrlParser: true })
