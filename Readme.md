@@ -10,3 +10,4 @@ to test
 npm i
 npm test
 
+standardJs is used for lint / codestyle convention
