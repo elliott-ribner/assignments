@@ -11,3 +11,5 @@ npm i && npm test
 standardJs is used for lint / codestyle convention: https://standardjs.com/
 
 api documentation: https://kap-assignments.herokuapp.com/apidoc/
+
+root url for api demo: https://kap-assignments.herokuapp.com/
