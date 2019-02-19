@@ -4,6 +4,7 @@ const { expect } = require('chai')
 const server = require('../server')
 const schemas = require('../lib/schemas')
 
+
 describe('API requests', function () {
   before(async () => {
     await schemas.Assignments.deleteAll()
@@ -11,7 +12,7 @@ describe('API requests', function () {
 
   it('/', () => {
     request(server)
-      .get('/test')
+      .get('/')
       .expect(200)
       .end(function (err, res) {
         expect(err).to.eql(null)

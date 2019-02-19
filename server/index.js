@@ -15,7 +15,7 @@ mongoose.Promise = global.Promise
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
-app.get('/test', (req, res) => {
+app.get('/', (req, res) => {
   res.sendStatus(200)
 })
 
