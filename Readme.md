@@ -11,3 +11,5 @@ npm i
 npm test
 
 standardJs is used for lint / codestyle convention
+
+api documentation: https://kap-assignments.herokuapp.com/apidoc/
