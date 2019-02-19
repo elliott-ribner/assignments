@@ -4,7 +4,7 @@
   "description": "API assignment for Kaplan",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
+    "test": "./node_modules/.bin/mocha --exit",
     "start": "node index.js"
   },
   "author": "Elliott Ribner <elliottlribner@gmail.com> (http://elliottribner.com)",
